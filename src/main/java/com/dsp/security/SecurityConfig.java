@@ -26,10 +26,10 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    @Autowired
+    //    @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
-//    @Autowired
+    //    @Autowired
     private CustomUserDetailsService userDetailsService;
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter,
@@ -45,11 +45,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/role/**", "/permission/**").permitAll()
-                        .requestMatchers("/api/admin/**", "/user/**").hasRole("ADMIN")
+                                .requestMatchers("/api/auth/**", "/role/**", "/permission/**").permitAll()
+                                .requestMatchers(
+                                        "/api/admin/**", "/user/**",
+                                        "/api/clientLocation/**", "/api/project/**").hasRole("ADMIN")
 //                        .requestMatchers("/api/admin/**", "/user/**").hasAnyAuthority("PROJECTS")
-                        .requestMatchers("/api/manager/**").hasAnyAuthority("MANAGE_USERS")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/api/manager/**").hasAnyAuthority("MANAGE_USERS")
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
